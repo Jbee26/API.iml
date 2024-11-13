@@ -9,6 +9,7 @@ import java.net.URL;
 // video to load jar
 //https://www.youtube.com/watch?v=QAJ09o3Xl_0
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -83,6 +84,10 @@ public class ReadJson {
 
             String name = (String)jsonObject.get("name");
             String mass = (String)jsonObject.get("mass");
+            String eColor = (String)jsonObject.get("eye_color");
+            String bYear = (String)jsonObject.get("birth_year");
+            JSONArray starships = (JSONArray)jsonObject.get("starships");
+
 
             org.json.simple.JSONArray msg = (org.json.simple.JSONArray) jsonObject.get("films");
             int n =   msg.size(); //(msg).length();
@@ -91,11 +96,24 @@ public class ReadJson {
                 System.out.println(test);
                 // System.out.println(person.getInt("key"));
             }
-            String height = (String)jsonObject.get("height");
+
 
 
             System.out.println(name);
             System.out.println(mass);
+            System.out.println(eColor);
+            System.out.println(bYear);
+
+
+
+            for (int i = 0; i < starships.size(); i++) {
+                System.out.println(starships.get(i));
+
+
+
+
+            }
+
         }
 
         catch (Exception e) {
