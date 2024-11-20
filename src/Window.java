@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import javax.smartcardio.CardTerminal;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -15,7 +14,7 @@ public class Window implements ActionListener {
     private JMenu file, edit, help;
     private JMenuItem cut, copy, paste, selectAll;
     private JTextArea ta; //typing area
-    private JTextArea ta2;
+    private JFrame jf;
     private JTextArea ta3;
     private JScrollPane sp;
     private JPanel CtrlP;
@@ -24,6 +23,7 @@ public class Window implements ActionListener {
     private int HEIGHT = 700;
     private JButton B1;
     private JButton B2;
+    private ImageIcon IC;
 
 
     public Window() {
@@ -50,9 +50,7 @@ public class Window implements ActionListener {
         ta = new JTextArea("ENTER POKEMON HERE");
         ta.setBounds(50, 5, WIDTH - 100, HEIGHT - 50);
         ta.setBorder(new LineBorder(Color.BLACK));
-        ta2 = new JTextArea();
-        ta2.setBounds(50, 800, WIDTH - 100, HEIGHT - 50);
-        ta2.setBorder(new LineBorder(Color.BLACK));
+
         ta3 = new JTextArea();
         ta3.setBorder(new LineBorder(Color.BLACK));
         sp = new JScrollPane(ta3);
@@ -61,9 +59,16 @@ public class Window implements ActionListener {
         Font f = new Font( "Chalkboard", Font.ITALIC, 15 );
         Font f2 = new Font( "Chalkboard", Font.ITALIC, 12 );
         ta.setFont( f );
-        ta2.setFont( f2 );
+
         B1.setFont( f );
         B2.setFont( f );
+
+//        JFrame jf = new JFrame();
+//        jf.setBounds(50, 800, WIDTH - 100, HEIGHT - 50);
+//        ImageIcon IC = new ImageIcon("Ditto-Anime.avif");
+//        jf.add(new JLabel(IC));
+//        jf.pack();
+//        jf.setVisible(true);
 
 
 
@@ -78,13 +83,16 @@ public class Window implements ActionListener {
 
         mainFrame.add(ta);
 
-        mainFrame.add(ta2);
+
 
         mainFrame.add(sp);
 
 
         CtrlP.add(B1);
         CtrlP.add(B2);
+
+
+
 
 
 
@@ -149,14 +157,16 @@ public class Window implements ActionListener {
 
             if (command.equals("ENTER")) {
 
+
                 System.out.println();
+
 
 
 
             } else if (command.equals("CLEAR")) {
 
                 ta.setText("ENTER POKEMON HERE");
-                ta2.setText("");
+//                ta2.setText("");
                 ta3.setText("");
 
 
@@ -191,54 +201,31 @@ public class Window implements ActionListener {
 
     public void HtmlRead() {
 
-        boolean invaild = false;
-
         try {
-
-            String Text = ta.getText();
-            System.out.println(Text);
-
-
-            String TextTa2 = ta2.getText();
-            System.out.println(TextTa2);
-
-
-            URL url = new URL(Text);
+            System.out.println();
+            URL url = new URL("https://pokeapi.co/api/v2/pokemon/ditto");
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(url.openStream())
             );
             String line;
 
             while ( (line = reader.readLine()) != null ) {
-                if (line.contains("href") && line.contains(TextTa2)) {
+                System.out.println(url);
+                if (line.contains("{")) {
 //                    System.out.println(line);
-                    line = line.substring(line.indexOf("href")+ 6);
+                    line = line.substring(line.indexOf("{")+ 6);
                     int end = line.indexOf("\"");
                     int oEnd = line.indexOf("\'");
 
 
-
-
                     if(end> -1){
-
-                        if (line.substring(0, end).contains(TextTa2)){
-                            System.out.print(line.substring(0, end)+"\n");
-                            ta3.append(line.substring(0, end)+"\n");
-                            invaild = true;
-
-                        }
-
-
+                        System.out.println(line.substring(0, end));
 
 
 
                     } else{
+                        System.out.println(line.substring(0, oEnd));
 
-                        if (line.substring(0, oEnd).contains(TextTa2)) {
-                            System.out.print(line.substring(0, oEnd)+"\n");
-                            ta3.append(line.substring(0, oEnd)+"\n");
-                            invaild = true;
-                        }
 
 
 
@@ -247,27 +234,10 @@ public class Window implements ActionListener {
 
 
 
-
-
-
                 }
 
-
-
             }
-
-            if (!invaild){
-                ta3.setText("Hmmmm... Invalid Serchterm or Link!");
-            }
-
-
-
-
-
             reader.close();
-
-
-
         } catch(Exception ex) {
             System.out.println(ex);
         }
